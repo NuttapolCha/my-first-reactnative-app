@@ -1,4 +1,5 @@
 import 'react-native-gesture-handler';
+// Test Comment
 import { StatusBar } from 'expo-status-bar';
 import * as React from 'react';
 import { Provider } from 'react-redux';
