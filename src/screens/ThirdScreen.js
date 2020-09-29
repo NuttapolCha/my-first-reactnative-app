@@ -4,10 +4,9 @@ import { Text, View, StyleSheet, Button } from 'react-native'
 export default class ThirdScreen extends Component {
     state = {
         display: '0',
-        prevNumber: null,
-        currNumber: null,
+        prevNumber: '0',
+        currNumber: '0',
         operator: null,
-        memory: null,
         status: 'prevNumber'
     }
     row = (first,second,third,fourth) => (
@@ -19,94 +18,121 @@ export default class ThirdScreen extends Component {
         </View>
     )
 
+    resetState = () => {
+        this.setState({
+            display: '0',
+            prevNumber: '0',
+            currNumber: '0',
+            operator: null,
+            status: 'prevNumber'
+        })
+    }
+
     onButtonPressHandler = (event) => {
-        let operatorCount = 0;
-        if ('0123456789'.indexOf(event) != -1 && this.state.status === 'prevNumber') {
-            //event is a number and assigning to prevNumber
-            if (this.state.prevNumber === null) {
+        let numbers = '0123456789';
+        let operators = '+-X/';
+        if (numbers.indexOf(event) != -1) { //Number is press
+            if (this.state.status === 'equalPress') {
                 this.setState({
+                    display: event,
                     prevNumber: event,
-                    display: event
-                });
-            } else {
-                this.setState({
-                    prevNumber: this.state.prevNumber + event,
-                    display: this.state.display + event,
+                    currNumber: '0',
+                    operator: null,
+                    status: 'prevNumber'
                 })
             }
-        } else if (event === 'C') {
-            //event is a clear
-            this.setState({
-                display: '0',
-                prevNumber: null,
-                currNumber: null,
-                operator: null,
-                memory: null,
-                status: 'prevNumber'
-            })
-        } else if (event === '<<') {
             if (this.state.status === 'prevNumber') {
-                if (this.state.display.length === 1) {
+                let temp = this.state.prevNumber
+                if (temp == 0) {
                     this.setState({
-                        display: '0',
-                        prevNumber: null,
+                        display: event,
+                        prevNumber: event,
                     })
-                    return;
-                }
-                this.setState({
-                    display: this.state.display.slice(0,-1),
-                    prevNumber: this.state.prevNumber.slice(0,-1),
-                })
-            } else if (this.state.status === 'currNumber') {
-                if (this.state.display.length === 1) {
+                } else {
                     this.setState({
-                        display: '0',
-                        currNumber: null,
-                    })
-                    return;
+                        display: temp + event,
+                        prevNumber: temp + event,
+                    }) 
                 }
-                this.setState({
-                    display: this.state.display.slice(0,-1),
-                    currNumber: this.state.currNumber.slice(0,-1)
-                })
+            } else if (this.state.status === 'toCalculate') {
+                let temp = this.state.currNumber
+                if (temp == 0) {
+                    this.setState({
+                        display: event,
+                        currNumber: event,
+                    })
+                } else {
+                    this.setState({
+                        display: temp + event,
+                        currNumber: temp + event,
+                    }) 
+                }
             }
-        } else if ('+-X/'.indexOf(event) != -1) {
-            //event is a operator
-            this.setState({
-                operator: event,
-                status: 'currNumber'
-            })
-            operatorCount += 1;
-            if (operatorCount > 1) {
+        } else if (operators.indexOf(event) != -1) { //Operator is press
+            
+            if (this.state.status === 'prevNumber') {
+                this.setState({
+                    operator: event,
+                    status: 'toCalculate'
+                })
+            } else if (this.state.status === 'equalPress') {
+                this.setState({
+                    currNumber: '0',
+                    operator: event,
+                    status: 'toCalculate'
+                })
+            } else if (this.state.status === 'toCalculate') {
                 this.setState({
                     display: this.calculateHandler(this.state.prevNumber,this.state.currNumber,this.state.operator),
-                    prevNumber: this.calculateHandler(this.state.prevNumber,this.state.currNumber,this.state.operator)
+                    prevNumber: this.calculateHandler(this.state.prevNumber,this.state.currNumber,this.state.operator),
+                    currNumber: '0',
+                    operator: event,
                 })
             }
-        } else if ('0123456789'.indexOf(event) != -1 && this.state.status === 'currNumber') {
-            //event is a number and assigning to currNumber
-            if (this.state.currNumber === null) {
-                this.setState({
-                    currNumber: event,
-                    display: event
-                });
-            } else {
-                this.setState({
-                    currNumber: this.state.currNumber + event,
-                    display: this.state.display + event,
-                })
-            }
-        } else if (event === '=') {
+        } else if (event === '=') { //equal sign is press
             this.setState({
                 display: this.calculateHandler(this.state.prevNumber,this.state.currNumber,this.state.operator),
-                prevNumber: null,
-                currNumber: null,
-                operator: null,
-                status: 'prevNumber'
-            });
-                
+                prevNumber: this.calculateHandler(this.state.prevNumber,this.state.currNumber,this.state.operator),
+                // currNumber: '0',
+                status: 'equalPress'
+            })
+            
+        } else if (event === '<<') { //undo is press
+            if (this.state.status === 'prevNumber') {
+                if (this.state.prevNumber == 0) {
+                    return;
+                } 
+                if (this.state.display.length === 1) {
+                    this.setState({
+                        display: '0',
+                        prevNumber: '0'
+                    })
+                } else {
+                    this.setState({
+                        display: this.state.display.slice(0,-1),
+                        prevNumber: this.state.prevNumber.slice(0,-1),
+                    })
+                }
+            } else if (this.state.status === 'toCalculate') {
+                if (this.state.currNumber == 0) {
+                    return;
+                } 
+                if (this.state.display.length === 1) {
+                    this.setState({
+                        display: '0',
+                        currNumber: '0'
+                    })
+                } else {
+                    this.setState({
+                        display: this.state.display.slice(0,-1),
+                        currNumber: this.state.currNumber.slice(0,-1),
+                    })
+                }
+            } else if (this.state.status === 'equalPress') return;
+
+        } else if (event === 'C') { //clear is press
+            this.resetState();
         }
-        console.log(this.state)
     }
 
     calculateHandler = (prevNumber,currNumber,operator) => {
@@ -143,6 +169,12 @@ export default class ThirdScreen extends Component {
                 {this.row('4','5','6','-')}
                 {this.row('1','2','3','=')}
                 {this.row('','0','','')}
+                {/* <Text>prevNumber: {this.state.prevNumber}</Text>
+                <Text>Operator: {this.state.operator}</Text>
+                <Text>currNumber: {this.state.currNumber}</Text>
+                <Text>display: {this.state.display}</Text>
+                <Text>Operator Count: {this.state.opCount}</Text>
+                <Text>Status: {this.state.status}</Text> */}
 
             </View>
         )
