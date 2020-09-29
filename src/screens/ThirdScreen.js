@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
 import { Text, View, StyleSheet, Button } from 'react-native'
+import NumButton from '../components/NumButton'
 
 export default class ThirdScreen extends Component {
     state = {
@@ -11,10 +12,14 @@ export default class ThirdScreen extends Component {
     }
     row = (first,second,third,fourth) => (
         <View style={styles.rowConainer}>
-            <Button title={first} style={styles.btnStyle} onPress={() => this.onButtonPressHandler(first)}/>
+            <NumButton label={first} touchFunction={() => this.onButtonPressHandler(first)} />
+            <NumButton label={second} touchFunction={() => this.onButtonPressHandler(second)} />
+            <NumButton label={third} touchFunction={() => this.onButtonPressHandler(third)} />
+            <NumButton label={fourth} touchFunction={() => this.onButtonPressHandler(fourth)} />
+            {/* <Button title={first} style={styles.btnStyle} onPress={() => this.onButtonPressHandler(first)}/>
             <Button title={second} style={styles.btnStyle} onPress={() => this.onButtonPressHandler(second)}/>
             <Button title={third} style={styles.btnStyle} onPress={() => this.onButtonPressHandler(third)}/>
-            <Button title={fourth} style={styles.btnStyle} onPress={() => this.onButtonPressHandler(fourth)}/>
+            <Button title={fourth} style={styles.btnStyle} onPress={() => this.onButtonPressHandler(fourth)}/> */}
         </View>
     )
 
@@ -132,6 +137,8 @@ export default class ThirdScreen extends Component {
 
         } else if (event === 'C') { //clear is press
             this.resetState();
+        } else {
+            return;
         }
     }
 
@@ -200,13 +207,7 @@ const styles = StyleSheet.create({
         justifyContent: 'space-between',
         marginLeft: 20,
         marginRight: 20,
-        borderWidth: 2,
-        borderColor: 'black',
-        padding: 15,
-        backgroundColor: 'yellow'
-    },
-    zeroContainer: {
-        alignItems: 'center',
+        padding: 5,
     },
     headerContainer: {
         justifyContent: 'center',
@@ -215,16 +216,6 @@ const styles = StyleSheet.create({
         marginTop: 40,
         marginBottom: 0,
         backgroundColor: 'pink',
-    },
-    btnStyle: {
-        width: 40,
-        height: 40,
-        fontSize: 36,
-        fontWeight: 'bold',
-        justifyContent: 'center',
-        alignItems: 'center',
-        backgroundColor: 'skyblue',
-        borderColor: 'black',
     },
     titleStyle: {
         fontSize: 36,
