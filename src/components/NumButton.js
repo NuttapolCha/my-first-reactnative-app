@@ -1,14 +1,14 @@
 import React from 'react'
-import { View, Text, StyleSheet,TouchableHighlight } from 'react-native'
+import { View, Text, StyleSheet,TouchableOpacity } from 'react-native'
 
 export default function NumButton(props) {
     if (props.label !== '') {
         return (
-            <TouchableHighlight onPress={props.touchFunction}>
+            <TouchableOpacity onPress={props.touchFunction}>
                 <View style={styles.buttonStyle}>
                     <Text style={styles.textStyle}>{props.label}</Text>
                 </View>
-            </TouchableHighlight>
+            </TouchableOpacity>
         )
     } else {
         return(
