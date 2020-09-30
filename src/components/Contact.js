@@ -16,6 +16,9 @@ export default function Contact(props) {
                 <TouchableOpacity onPress={props.showContactFunction}>
                     <Ionicons name="ios-document" size={iconSize} color="green" style={styles.iconStyle}/>
                 </TouchableOpacity>
+                <TouchableOpacity onPress={props.showEditContactFunction}>
+                    <Ionicons name="ios-hammer" size={iconSize} color="gold" style={styles.iconStyle}/>
+                </TouchableOpacity>
                 <TouchableOpacity onPress={props.deleteFunction}>
                     <Ionicons name="ios-trash" size={iconSize} color="crimson"style={styles.iconStyle}/>
                 </TouchableOpacity>
@@ -48,11 +51,11 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         justifyContent: 'flex-start',
         marginLeft: 5,
-        width: 150,
+        width: 100,
     },
     iconStyle: {
         alignItems: 'center',
-        margin: 10,
+        margin: 5,
     },
     image: {
         width: 90,

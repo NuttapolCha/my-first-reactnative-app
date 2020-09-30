@@ -41,6 +41,8 @@ const contactReducer = (state = initialState, action) => {
                             id: action.id,
                             firstName: action.firstName,
                             lastName: action.lastName,
+                            email: action.email,
+                            age: action.age,
                             image: action.image
                         }
                     } else {

@@ -16,6 +16,8 @@ export const EDIT_CONTACT = (contactData) => {
         id: contactData.id,
         firstName: contactData.firstName,
         lastName: contactData.lastName,
+        email: contactData.email,
+        age: contactData.age,
         image: contactData.image
     });
 }
